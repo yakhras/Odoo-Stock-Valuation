@@ -40,11 +40,25 @@ Standard Odoo keeps one cost per product per company. If the same product is bou
 
 ## Usage
 
-- **Inventory → Reporting → Location Costs:** every product/warehouse cost, with its full change history in the form.
-- **Product form → Costs tab** (visible to accounting managers): that product's cost in each warehouse.
-- **Inventory valuation / quants:** the *Unit Value* and *Value* columns use the warehouse cost.
-- **Revaluation** (the standard Odoo *Product Revaluation* wizard): choose the *Warehouse* and then the added value.
-- **EXO picking:** fill in *Destination* (the receiving warehouse's stock location) and validate. The EXI picking is created with `origin` = the EXO reference. Validate it when the goods arrive.
+**Inventory → Reporting → Location Costs:** one line per product and warehouse (1), with that warehouse's current cost (2). Open a line to see its full change history.
+
+![Location costs](stock_valuation/docs/location_costs.png)
+
+**Product form → Costs tab** (1), visible to accounting managers: that product's cost in each warehouse (2).
+
+![Product costs tab](stock_valuation/docs/product_costs.png)
+
+**Stock per location:** *Unit Value* (1) and *Value* (2) use the cost of the location's warehouse. Here the same bolt is worth 0.44 in WH and 0.72 in NWH.
+
+![Stock value per warehouse](stock_valuation/docs/stock_value.png)
+
+**Revaluation** (the standard *Product Revaluation* wizard): choose the *Warehouse* (1). The current value shown (2) is that warehouse's value only.
+
+![Revaluation per warehouse](stock_valuation/docs/revaluation.png)
+
+**EXO picking:** fill in *Destination* (1), the receiving warehouse's stock location, and validate. The EXI picking is created with `origin` = the EXO reference. Validate it when the goods arrive, and they're valued at the source warehouse's cost.
+
+![EXO transfer](stock_valuation/docs/exo_transfer.png)
 
 ## Tests
 
