@@ -8,7 +8,7 @@
     'maintainers': ["yakhras"],
     'website': "https://yaserakhras.com",
     'category': "Inventory/Inventory",
-    'version': '18.0.1.0.1',
+    'version': '18.0.1.0.2',
     'application': False,
     'license': 'AGPL-3',
     'depends': ['stock_landed_costs'],

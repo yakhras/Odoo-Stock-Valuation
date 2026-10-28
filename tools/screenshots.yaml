@@ -1,0 +1,65 @@
+# Screenshot spec for C:\Odoo\scripts\odoo_shots.py (syntax in that file's docstring).
+# Captions live on the site page (front matter `screens`), not here. 18.0 only.
+module: stock_valuation
+viewport: [1440, 900]
+shots:
+  - name: location_costs
+    open: /odoo/action-stock_valuation.action_product_location_cost_unified
+    wait: .o_list_table .o_data_row
+    marks: ["th[data-name='warehouse_id']", "th[data-name='cost']"]
+    covers: [stock_valuation.action_product_location_cost_unified,
+             stock_valuation.view_product_location_cost_unified_list, stock_valuation.menu_product_location_cost_main]
+
+  - name: product_costs
+    open: /odoo/action-stock.stock_product_normal_action/{ref:stock_valuation_demo.bolt}
+    wait: .o_form_view .o_notebook
+    steps:
+      - click: ".o_notebook .nav-link:has-text('Costs')"
+      - wait: ".o_field_widget[name='location_cost_ids']"
+    marks: [".o_notebook .nav-link:has-text('Costs')", ".o_field_widget[name='location_cost_ids']"]
+    covers: [stock_valuation.product_product_form]
+
+  - name: stock_value
+    open: /odoo/action-stock.dashboard_open_quants
+    wait: .o_list_table
+    steps:            # drop the "Product > Location" grouping, keep "Internal Locations"
+      - click: ".o_searchview_facet:has-text('Product') .o_facet_remove"
+      - wait: .o_list_table .o_data_row
+      - click: .o_optional_columns_dropdown_toggle
+      - click: ".o-dropdown--menu .dropdown-item:has(:text-is('Value')) input"
+      - press: Escape
+    marks: ["th[data-name='unit_value']", "th[data-name='value']"]
+    covers: [stock_valuation.stock_quant_list]
+
+  - name: revaluation
+    open: /odoo/action-stock.stock_product_normal_action/{ref:stock_valuation_demo.panel}
+    wait: .o_form_view
+    steps:            # no menu opens the wizard directly from here: open it like the product's button does
+      - js: >-
+          odoo.__WOWL_DEBUG__.root.env.services.action.doAction({type: 'ir.actions.act_window',
+          name: 'Product Revaluation', res_model: 'stock.valuation.layer.revaluation',
+          views: [[false, 'form']], target: 'new', context: {default_product_id: {ref:stock_valuation_demo.panel},
+          default_company_id: {ref:stock_valuation_demo.company}}})
+      - wait: .modal .o_form_view
+      - fill: [".modal .o_field_widget[name='warehouse_id'] input", Main]
+      - pause: 800
+      - press: Enter
+      - pause: 800
+    marks: [".modal .o_field_widget[name='warehouse_id']", ".modal .o_field_widget[name='current_value_svl']"]
+    covers: [stock_valuation.stock_valuation_layer_revaluation_form]
+
+  - name: valuation_layer
+    open: /odoo/action-stock_account.stock_valuation_layer_action/{ref:stock_valuation_demo.north_bolt_layer}
+    wait: .o_form_view .o_form_sheet
+    marks: [".o_field_widget[name='warehouse_id']"]
+    covers: [stock_valuation.stock_valuation_layer_form]
+
+  - name: exo_transfer
+    open: /odoo/action-stock.action_picking_tree_all/{ref:stock_valuation_demo.exo}
+    wait: .o_form_view .o_form_sheet
+    marks: [".o_field_widget[name='destination']"]
+    covers: [stock_valuation.stock_picking_form]
+
+skip:
+  stock_valuation.view_product_location_cost_unified_form: >-
+    held back: its history table shows bugs 5 and 6 (working_history/stock_valuation_standalone_plan.md)

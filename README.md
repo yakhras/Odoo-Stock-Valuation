@@ -1,5 +1,7 @@
 # Stock Valuation per Warehouse
 
+[![tests](https://github.com/yakhras/Odoo-Stock-Valuation/actions/workflows/tests.yml/badge.svg?branch=18.0)](https://github.com/yakhras/Odoo-Stock-Valuation/actions/workflows/tests.yml)
+
 An Odoo module that values stock **per warehouse** instead of once per company.
 Each warehouse keeps its own average cost for a product. Receipts, deliveries, landed costs, revaluations and transfers between warehouses are all valued with the cost of the warehouse they touch.
 
